@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-
 /// Spinner Input like HTML5 spinners
 class SpinnerButtonStyle {
   Color color;
@@ -30,10 +29,13 @@ class SpinnerButtonStyle {
 class SpinnerInput extends StatefulWidget {
   final bool disabledPopup;
   final double spinnerValue;
+  final String spinnerValuePrefix;
+  final String spinnerValueSuffix;
   final double middleNumberWidth;
   final EdgeInsets middleNumberPadding;
   final TextStyle middleNumberStyle;
   final Color middleNumberBackground;
+  final Border middleNumberBorder;
   final double minValue;
   final double maxValue;
   final double step;
@@ -49,10 +51,13 @@ class SpinnerInput extends StatefulWidget {
 
   SpinnerInput({
     @required this.spinnerValue,
+    this.spinnerValuePrefix = '',
+    this.spinnerValueSuffix = '',
     this.middleNumberWidth,
     this.middleNumberBackground,
     this.middleNumberPadding = const EdgeInsets.all(5),
     this.middleNumberStyle = const TextStyle(fontSize: 20),
+    this.middleNumberBorder = const Border(),
     this.maxValue: 100,
     this.minValue: 0,
     this.step: 1,
@@ -88,7 +93,6 @@ class _SpinnerInputState extends State<SpinnerInput>
 
   @override
   void initState() {
-
     /// initializing variables
     _spinnerValue = widget.spinnerValue;
 
@@ -107,7 +111,6 @@ class _SpinnerInputState extends State<SpinnerInput>
             extentOffset: textEditingController.value.text.length);
       }
     });
-
 
     // initialize buttons
     _plusSpinnerStyle = widget.plusButton ?? SpinnerButtonStyle();
@@ -204,10 +207,15 @@ class _SpinnerInputState extends State<SpinnerInput>
                 child: Container(
                     width: widget.middleNumberWidth,
                     padding: widget.middleNumberPadding,
-                    color: widget.middleNumberBackground,
+                    decoration: BoxDecoration(
+                      color: widget.middleNumberBackground,
+                      border: widget.middleNumberBorder,
+                    ),
                     child: Text(
-                      widget.spinnerValue
-                          .toStringAsFixed(widget.fractionDigits),
+                      widget.spinnerValuePrefix +
+                          widget.spinnerValue
+                              .toStringAsFixed(widget.fractionDigits) +
+                          widget.spinnerValueSuffix,
                       textAlign: TextAlign.center,
                       style: widget.middleNumberStyle,
                     )),
